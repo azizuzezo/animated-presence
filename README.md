@@ -10,10 +10,20 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/azizuzezo/animated-presence/releases/latest"><img src="https://img.shields.io/badge/Download-VS%20Code%20(.vsix)-5865F2?style=for-the-badge&logo=github&logoColor=white" alt="Download untuk VS Code"></a>
+  <a href="https://open-vsx.org/extension/xyyxzxx/animated-presence"><img src="https://img.shields.io/badge/Open%20VSX-Antigravity%20%C2%B7%20Cursor%20%C2%B7%20Windsurf-A60EE5?style=for-the-badge&logo=eclipseide&logoColor=white" alt="Install dari Open VSX"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/azizuzezo/animated-presence/releases/latest"><img src="https://img.shields.io/github/v/release/azizuzezo/animated-presence?label=versi&color=5865F2" alt="Versi terbaru"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/azizuzezo/animated-presence?label=lisensi" alt="Lisensi MIT"></a>
+</p>
+
+<p align="center">
   <img src="media/demo.gif" width="600" alt="Contoh presence Animated Presence di profil Discord">
 </p>
 
-<p align="center"><i>Contoh tampilan di profil Discord. Di Discord, setiap frame berganti tiap 15 detik.</i></p>
+<p align="center"><i>Contoh tampilan di profil Discord. Frame animasi berganti tiap 15 detik, dan presence ikut berubah saat kamu mengetik atau pindah file.</i></p>
 
 ---
 
@@ -58,16 +68,55 @@
 
 ## Instalasi
 
-**Dari file `.vsix`:** buka panel Extensions (`Ctrl+Shift+X`), klik menu **⋯** → **Install from VSIX…**, lalu pilih file `animated-presence-x.y.z.vsix`.
+Pilih sesuai editor yang kamu pakai. Setelah terpasang, **tidak perlu setting apa pun**.
 
-Atau lewat terminal:
+| Editor | Cara install | Waktu |
+| --- | --- | --- |
+| **Antigravity, Cursor, Windsurf, VSCodium, Trae** | Cari *Animated Presence* di Extensions, klik **Install** | ~10 detik |
+| **VS Code** | Download `.vsix` dari [Releases](https://github.com/azizuzezo/animated-presence/releases/latest), lalu **Install from VSIX** | ~30 detik |
+
+### Antigravity, Cursor, Windsurf, VSCodium, Trae
+
+<p align="center">
+  <img src="media/install-openvsx.gif" width="560" alt="Langkah install dari panel Extensions">
+</p>
+
+1. Buka panel **Extensions** (`Ctrl+Shift+X`, di macOS `Cmd+Shift+X`).
+2. Ketik **Animated Presence**, lalu klik **Install**.
+3. Selesai. Item **Presence** muncul di status bar bawah, tanda sudah terhubung ke Discord.
+
+Ekstensi ini diambil dari [Open VSX](https://open-vsx.org/extension/xyyxzxx/animated-presence), dan update berikutnya akan ditawarkan otomatis.
+
+### VS Code
+
+<p align="center">
+  <img src="media/install-vsix.gif" width="560" alt="Langkah install dari file .vsix di VS Code">
+</p>
+
+1. Download file **`animated-presence-x.y.z.vsix`** dari halaman [Releases](https://github.com/azizuzezo/animated-presence/releases/latest), di bagian **Assets**.
+2. Di VS Code, buka panel **Extensions** (`Ctrl+Shift+X`), klik menu **⋯** di pojok kanan atas panel.
+3. Pilih **Install from VSIX…**, lalu pilih file yang tadi didownload.
+4. Selesai. Item **Presence** muncul di status bar bawah.
+
+<details>
+<summary>Atau lewat terminal</summary>
 
 ```sh
-code --install-extension animated-presence-0.1.0.vsix
+code --install-extension animated-presence-x.y.z.vsix
 ```
 
-Pastikan **aplikasi Discord desktop** sedang berjalan. Versi browser tidak bisa menerima presence dari aplikasi lain.
-Di Discord, aktifkan **User Settings → Activity Privacy → Share your detected activities with others**.
+Ganti `x.y.z` dengan versi yang kamu download.
+
+</details>
+
+### Cek pengaturan Discord
+
+Presence hanya muncul kalau dua hal ini terpenuhi:
+
+- **Aplikasi Discord desktop** sedang berjalan. Discord versi browser tidak bisa menerima presence dari aplikasi lain.
+- **User Settings → Activity Privacy → Share your detected activities with others** dalam keadaan aktif.
+
+Belum muncul juga? Lihat bagian [Troubleshooting](#troubleshooting).
 
 ## Deteksi AI agent
 
