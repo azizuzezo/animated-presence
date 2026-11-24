@@ -157,7 +157,7 @@ function formatElapsed(ms) {
 
 function progressBar(pct, len = 8) {
   const filled = Math.round((pct / 100) * len);
-  return '▰'.repeat(filled) + '▱'.repeat(len - filled);
+  return '\u25b0'.repeat(filled) + '\u25b1'.repeat(len - filled);
 }
 
 function fill(template, vars) {
@@ -199,7 +199,7 @@ function buildActivity() {
   const vars = {
     workspace: c.get('showWorkspace') ? wsName || 'No workspace' : 'a project',
     elapsed: formatElapsed(Date.now() - sessionStart),
-    spinner: pick(spinnerFrames, ['⠋']),
+    spinner: pick(spinnerFrames, ['\u280b']),
     activity: act.label,
     activityIcon: act.key,
     branch: getBranch(editor?.document.uri) || 'no-branch',
@@ -258,7 +258,7 @@ function buildActivity() {
       large_image: c.get('largeImageKey') || 'logo',
       large_text: idle
         ? vars.editor
-        : `${vars.editor} • ${vars.language}${agent ? ` • ${agent.name}` : ''}`,
+        : `${vars.editor} \u2022 ${vars.language}${agent ? ` \u2022 ${agent.name}` : ''}`,
     },
     instance: false,
   };
@@ -295,7 +295,7 @@ function send(advance = true) {
   }
   const agent = cfg().get('showAgent') ? agents.current() : null;
   status.tooltip = `Animated Presence: terhubung ke Discord\nAgent: ${
-    agent ? `${agent.name}${agent.working ? ' (sedang menulis kode)' : ''} • via ${agent.source}` : 'tidak terdeteksi'}`;
+    agent ? `${agent.name}${agent.working ? ' (sedang menulis kode)' : ''} \u2022 via ${agent.source}` : 'tidak terdeteksi'}`;
   lastSent = Date.now();
   if (advance) frame++;
 }

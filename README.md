@@ -17,17 +17,17 @@
 
 ---
 
-## ✨ Fitur
+## Fitur
 
 - **Tanpa setup.** Install, buka VS Code, dan presence langsung muncul. Tidak perlu token, login, atau Client ID.
-- **Teks animatif.** Baris presence bergantian: file → workspace → bahasa → AI agent, dengan spinner `⠋⠙⠹⠸` dan progress bar `▰▰▰▱▱▱▱▱`.
+- **Teks animatif.** Baris presence bergantian: file → workspace → bahasa → AI agent, dengan spinner dan progress bar `▰▰▰▱▱▱▱▱`.
 - **Gambar kecil berganti.** Ikon bahasa (27 bahasa), status aktivitas (*typing*, *reading*, *debugging*, *idle*), dan logo AI agent tampil bergantian.
 - **Deteksi AI agent.** Presence tahu saat kamu memakai Claude Code, Codex, Copilot, Gemini, Cline, Antigravity, Cursor, dan agent lain.
 - **Tombol "View Repository".** Otomatis mengarah ke repo GitHub atau GitLab proyekmu, dan hanya muncul untuk repo publik.
 - **Ramah privasi.** Nama file dan workspace bisa disembunyikan, dan workspace tertentu bisa diabaikan.
 - **Semua versi Discord.** Discord, Canary, Flatpak, Snap, dan Vesktop di Windows, macOS, dan Linux.
 
-## 🖼️ Contoh tampilan
+## Contoh tampilan
 
 <table>
   <tr>
@@ -56,7 +56,7 @@
   </tr>
 </table>
 
-## 📦 Instalasi
+## Instalasi
 
 **Dari file `.vsix`:** buka panel Extensions (`Ctrl+Shift+X`), klik menu **⋯** → **Install from VSIX…**, lalu pilih file `animated-presence-x.y.z.vsix`.
 
@@ -69,7 +69,7 @@ code --install-extension animated-presence-0.1.0.vsix
 Pastikan **aplikasi Discord desktop** sedang berjalan. Versi browser tidak bisa menerima presence dari aplikasi lain.
 Di Discord, aktifkan **User Settings → Activity Privacy → Share your detected activities with others**.
 
-## 🤖 Deteksi AI agent
+## Deteksi AI agent
 
 | Cara deteksi | Agent |
 | --- | --- |
@@ -80,14 +80,14 @@ Di Discord, aktifkan **User Settings → Activity Privacy → Share your detecte
 
 Agent dianggap aktif selama 2 menit setelah sinyal terakhir. Arahkan kursor ke item **Presence** di status bar untuk melihat agent yang sedang terdeteksi.
 
-## 🔗 Tombol "View Repository"
+## Tombol "View Repository"
 
 Tombol mengarah ke remote `origin` workspace. Format SSH diubah otomatis ke HTTPS, dan token di URL selalu dibuang.
 Secara default tombol **hanya muncul untuk repo publik**, supaya nama repo private tidak bocor.
 
 > Discord tidak menampilkan tombol di presence milikmu sendiri. Hanya orang lain yang bisa melihat dan mengkliknya.
 
-## ⚙️ Pengaturan
+## Pengaturan
 
 Semua pengaturan opsional. Buka **Settings** dan cari `Animated Presence`.
 
@@ -98,7 +98,7 @@ Semua pengaturan opsional. Buka **Settings** dan cari `Animated Presence`.
 | `animatedPresence.detailsFrames` | `["Editing {file}", …]` | Frame baris pertama |
 | `animatedPresence.stateFrames` | `["{spinner} Line {line}", …]` | Frame baris kedua |
 | `animatedPresence.smallImageFrames` | ikon bahasa + aktivitas | Frame gambar kecil |
-| `animatedPresence.spinnerFrames` | `⠋ ⠙ ⠹ …` | Karakter spinner |
+| `animatedPresence.spinnerFrames` | spinner Braille | Karakter spinner |
 | `animatedPresence.showAgent` | `true` | Deteksi AI agent |
 | `animatedPresence.agentFrames` | `["🤖 Coding with {agent}"]` | Frame saat agent terdeteksi |
 | `animatedPresence.agentWorkingFrames` | `["⚡ {agent} is writing code"]` | Frame saat agent mengedit file |
@@ -132,7 +132,7 @@ Semua pengaturan opsional. Buka **Settings** dan cari `Animated Presence`.
 
 </details>
 
-## 🧭 Perintah
+## Perintah
 
 | Perintah | Fungsi |
 | --- | --- |
@@ -140,7 +140,7 @@ Semua pengaturan opsional. Buka **Settings** dan cari `Animated Presence`.
 | `Animated Presence: Disable` | Matikan dan hapus presence |
 | `Animated Presence: Reconnect to Discord` | Sambungkan ulang (atau klik item **Presence** di status bar) |
 
-## ❓ Troubleshooting
+## Troubleshooting
 
 <details>
 <summary><b>Presence tidak muncul</b></summary>
@@ -168,7 +168,7 @@ Batas ini berasal dari Discord dan tidak bisa dipercepat.
 
 </details>
 
-## 🙏 Kredit
+## Kredit
 
 - Ikon bahasa: [Devicon](https://devicon.dev) (MIT)
 - Logo AI agent: [Simple Icons](https://simpleicons.org) (CC0)
@@ -177,6 +177,6 @@ Batas ini berasal dari Discord dan tidak bisa dipercepat.
 Discord, Visual Studio Code, dan nama atau logo AI agent adalah merek dagang milik pemiliknya masing-masing.
 Ekstensi ini tidak berafiliasi dengan mereka.
 
-## 📄 Lisensi
+## Lisensi
 
 [MIT](LICENSE)

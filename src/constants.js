@@ -1,6 +1,6 @@
 // Application ID Discord milik pembuat ekstensi.
 // Isi SEKALI sebelum publish, supaya pengguna lain tidak perlu setup apa pun.
-// Dapatkan di https://discord.com/developers/applications → New Application → salin "Application ID".
+// Dapatkan di https://discord.com/developers/applications -> New Application -> salin "Application ID".
 // Nama aplikasi = teks setelah "Playing ..." di profil Discord (mis. "Visual Studio Code").
 const DEFAULT_CLIENT_ID = '1574825884290916463';
 

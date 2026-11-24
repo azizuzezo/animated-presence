@@ -1,7 +1,7 @@
 // URL repository dari remote git, untuk tombol "View Repository".
 const vscode = require('vscode');
 
-const visibility = new Map(); // url → true (publik) | false (private/tidak bisa diakses) | 'pending'
+const visibility = new Map(); // url -> true (publik) | false (private/tidak bisa diakses) | 'pending'
 
 function gitApi() {
   try {
@@ -16,7 +16,7 @@ function currentRepo(uri) {
   return (uri && git.getRepository?.(uri)) || git.repositories?.[0] || null;
 }
 
-// git@github.com:user/repo.git, ssh://git@host:22/user/repo, https://token@host/user/repo.git → https://host/user/repo
+// git@github.com:user/repo.git, ssh://git@host:22/user/repo, https://token@host/user/repo.git -> https://host/user/repo
 function toWebUrl(remote) {
   if (!remote) return null;
   let s = String(remote).trim();
@@ -50,7 +50,7 @@ function checkPublic(url, onDone) {
   const t = setTimeout(() => ctrl.abort(), 8000);
   fetch(url, { method: 'GET', redirect: 'manual', signal: ctrl.signal, headers: { 'User-Agent': 'animated-presence' } })
     .then((res) => { visibility.set(url, res.status === 200); })
-    .catch(() => { visibility.delete(url); }) // jaringan gagal → coba lagi nanti
+    .catch(() => { visibility.delete(url); }) // jaringan gagal -> coba lagi nanti
     .finally(() => { clearTimeout(t); onDone?.(); });
 }
 

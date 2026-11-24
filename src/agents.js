@@ -2,7 +2,7 @@
 // Sinyal (dari paling kuat):
 //   1. Perintah CLI agent yang sedang berjalan di terminal (shell integration)
 //   2. Tab panel agent yang sedang terlihat (mis. tab "Claude Code")
-//   3. File diubah bukan dari editor yang sedang diketik → agent sedang menulis kode
+//   3. File diubah bukan dari editor yang sedang diketik -> agent sedang menulis kode
 //   4. Editor turunan VS Code dengan agent bawaan (Antigravity, Cursor, Windsurf, ...)
 const vscode = require('vscode');
 
@@ -43,8 +43,8 @@ const WORKING_TTL = 30 * 1000; // agent dianggap "sedang menulis kode" 30 detik 
 
 class AgentDetector {
   constructor() {
-    this.lastSeen = new Map(); // agentId → timestamp
-    this.running = new Map(); // TerminalShellExecution → agentId
+    this.lastSeen = new Map(); // agentId -> timestamp
+    this.running = new Map(); // TerminalShellExecution -> agentId
     this.lastAiEdit = 0;
     this.lastAiAgent = null;
     this.host = null;
@@ -153,7 +153,7 @@ class AgentDetector {
     }
   }
 
-  // → { name, icon, working, source } atau null
+  // -> { name, icon, working, source } atau null
   current() {
     this._scanTabs();
     const now = Date.now();
