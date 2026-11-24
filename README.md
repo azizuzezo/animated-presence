@@ -19,7 +19,7 @@
 
 ## Fitur
 
-- **Tanpa setup.** Install, buka VS Code, dan presence langsung muncul. Tidak perlu token, login, atau Client ID.
+- **Tanpa setup.** Install, buka VS Code, dan presence langsung muncul. Tidak perlu login atau konfigurasi apa pun.
 - **Teks animatif.** Baris presence bergantian: file → workspace → bahasa → AI agent, dengan spinner dan progress bar `▰▰▰▱▱▱▱▱`.
 - **Gambar kecil berganti.** Ikon bahasa (27 bahasa), status aktivitas (*typing*, *reading*, *debugging*, *idle*), dan logo AI agent tampil bergantian.
 - **Deteksi AI agent.** Presence tahu saat kamu memakai Claude Code, Codex, Copilot, Gemini, Cline, Antigravity, Cursor, dan agent lain.
@@ -82,7 +82,7 @@ Agent dianggap aktif selama 2 menit setelah sinyal terakhir. Arahkan kursor ke i
 
 ## Tombol "View Repository"
 
-Tombol mengarah ke remote `origin` workspace. Format SSH diubah otomatis ke HTTPS, dan token di URL selalu dibuang.
+Tombol mengarah ke remote `origin` workspace. Format SSH diubah otomatis ke HTTPS.
 Secara default tombol **hanya muncul untuk repo publik**, supaya nama repo private tidak bocor.
 
 > Discord tidak menampilkan tombol di presence milikmu sendiri. Hanya orang lain yang bisa melihat dan mengkliknya.

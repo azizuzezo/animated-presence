@@ -16,7 +16,7 @@ function currentRepo(uri) {
   return (uri && git.getRepository?.(uri)) || git.repositories?.[0] || null;
 }
 
-// git@github.com:user/repo.git, ssh://git@host:22/user/repo, https://token@host/user/repo.git -> https://host/user/repo
+// git@github.com:user/repo.git, ssh://git@host:22/user/repo, https://user@host/user/repo.git -> https://host/user/repo
 function toWebUrl(remote) {
   if (!remote) return null;
   let s = String(remote).trim();
@@ -27,13 +27,10 @@ function toWebUrl(remote) {
   let url;
   try { url = new URL(s); } catch { return null; }
   if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
-  url.username = ''; // buang kredensial
-  url.password = '';
-  url.search = '';
-  url.hash = '';
-  url.pathname = url.pathname.replace(/\.git\/?$/, '').replace(/\/+$/, '');
-  if (url.pathname.split('/').filter(Boolean).length < 2) return null;
-  return url.toString();
+  // Susun ulang hanya dari origin + path, jadi bagian user@ di URL tidak ikut
+  const pathname = url.pathname.replace(/\.git\/?$/, '').replace(/\/+$/, '');
+  if (pathname.split('/').filter(Boolean).length < 2) return null;
+  return `${url.origin}${pathname}`;
 }
 
 function remoteUrl(repo) {

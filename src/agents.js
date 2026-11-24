@@ -113,12 +113,12 @@ class AgentDetector {
   _matchCommand(cmdLine) {
     if (!cmdLine) return null;
     // Lewati variabel env (FOO=bar), sudo, npx/bunx/pnpm dlx
-    const tokens = cmdLine.trim().split(/\s+/);
+    const parts = cmdLine.trim().split(/\s+/);
     const skip = new Set(['sudo', 'npx', 'bunx', 'pnpx', 'env', 'exec', 'time']);
-    for (let i = 0; i < tokens.length; i++) {
-      let t = tokens[i];
+    for (let i = 0; i < parts.length; i++) {
+      let t = parts[i];
       if (/^\w+=/.test(t) || skip.has(t) || t.startsWith('-')) continue;
-      if ((t === 'pnpm' || t === 'yarn') && tokens[i + 1] === 'dlx') { i++; continue; }
+      if ((t === 'pnpm' || t === 'yarn') && parts[i + 1] === 'dlx') { i++; continue; }
       t = t.split(/[\\/]/).pop().replace(/\.(exe|cmd|ps1)$/i, '').replace(/@.*$/, '');
       if (t.startsWith('@')) t = t.split('/').pop();
       const pkgMap = { 'claude-code': 'claude', 'gemini-cli': 'gemini', 'qwen-code': 'qwen', 'aider-chat': 'aider' };
