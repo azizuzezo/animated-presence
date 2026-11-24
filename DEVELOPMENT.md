@@ -38,7 +38,8 @@ Butuh `rsvg-convert` (librsvg) dan `ffmpeg`.
 
 ```sh
 node scripts/build-icons.js     # ikon Discord + ikon ekstensi
-node scripts/build-preview.js   # media/demo.gif dan gambar README
+node scripts/build-preview.js        # media/demo.gif dan kartu contoh README
+node scripts/build-install-gifs.js   # media/install-*.gif (langkah instalasi)
 ```
 
 Menambah bahasa: tambahkan ke `LANGUAGE_ICONS` di [src/constants.js](src/constants.js) dan `DEVICON_NAME` di
