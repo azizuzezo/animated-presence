@@ -207,12 +207,14 @@ async function main() {
       '<clipPath id="r"><rect width="1024" height="1024" rx="224"/></clipPath>');
     render('logo', full, path.join(DISCORD_DIR, 'logo.png'), 1024);
     render('app-icon', full, path.join(ASSETS, 'app-icon.png'), 1024);
-    render('icon', rounded, path.join(ASSETS, 'icon.png'), 256);
   } else {
     render('logo', logo(), path.join(DISCORD_DIR, 'logo.png'), 1024);
     render('app-icon', logo(), path.join(ASSETS, 'app-icon.png'), 1024);
-    render('icon', logo({ fullBleed: false }), path.join(ASSETS, 'icon.png'), 256);
   }
+  // Ikon Marketplace & gambar README selalu memakai desain sendiri tanpa logo brand lain
+  // (Marketplace menolak ikon yang memuat logo VS Code / Discord sebagai "suspicious content").
+  render('icon', logo({ fullBleed: false }), path.join(ASSETS, 'icon.png'), 256);
+  render('logo-neutral', logo(), path.join(ASSETS, 'logo-neutral.png'), 1024);
   made.push('logo');
 
   for (const [key, s] of Object.entries(ACTIVITY)) {
@@ -259,7 +261,8 @@ async function main() {
   const items = made.map((k, i) => {
     const x = (i % cols) * cell;
     const y = Math.floor(i / cols) * (cell + 28);
-    const png = fs.readFileSync(path.join(DISCORD_DIR, `${k}.png`)).toString('base64');
+    const src = k === 'logo' ? path.join(ASSETS, 'logo-neutral.png') : path.join(DISCORD_DIR, `${k}.png`); // README: tanpa logo brand
+    const png = fs.readFileSync(src).toString('base64');
     return `<image x="${x + 16}" y="${y + 12}" width="128" height="128" href="data:image/png;base64,${png}"/>
       <text x="${x + cell / 2}" y="${y + 168}" text-anchor="middle" font-family="${FONT}" font-size="14" fill="#DBDEE1">${k}</text>`;
   }).join('');
