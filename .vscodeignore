@@ -1,0 +1,7 @@
+.vscode/**
+.gitignore
+*.vsix
+scripts/**
+assets/**
+!assets/icon.png
+DEVELOPMENT.md

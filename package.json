@@ -1,0 +1,153 @@
+{
+  "name": "animated-presence",
+  "displayName": "Animated Presence",
+  "icon": "assets/icon.png",
+  "galleryBanner": { "color": "#5865F2", "theme": "dark" },
+  "keywords": ["discord", "rich presence", "rpc", "presence", "status"],
+  "description": "Discord Rich Presence animatif untuk VS Code: teks berputar, ikon berganti, deteksi AI agent, dan tombol repository.",
+  "version": "0.1.0",
+  "publisher": "xyyxzxx",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/azizuzezo/animated-presence.git" },
+  "homepage": "https://github.com/azizuzezo/animated-presence#readme",
+  "bugs": { "url": "https://github.com/azizuzezo/animated-presence/issues" },
+  "engines": { "vscode": "^1.93.0" },
+  "categories": ["Other"],
+  "main": "./src/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "commands": [
+      { "command": "animatedPresence.enable", "title": "Animated Presence: Enable" },
+      { "command": "animatedPresence.disable", "title": "Animated Presence: Disable" },
+      { "command": "animatedPresence.reconnect", "title": "Animated Presence: Reconnect to Discord" }
+    ],
+    "configuration": {
+      "title": "Animated Presence",
+      "properties": {
+        "animatedPresence.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Aktifkan Discord Rich Presence."
+        },
+        "animatedPresence.clientId": {
+          "type": "string",
+          "default": "",
+          "description": "Opsional. Biarkan kosong untuk memakai aplikasi Discord bawaan ekstensi. Isi hanya jika ingin memakai aplikasi Discord sendiri (nama & gambar sendiri)."
+        },
+        "animatedPresence.frameInterval": {
+          "type": "number",
+          "default": 15,
+          "minimum": 15,
+          "description": "Detik antar frame animasi. Discord membatasi update ±1 kali per 15 detik, jadi minimum 15."
+        },
+        "animatedPresence.detailsFrames": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["Editing {file}", "Workspace: {workspace}", "Coding in {language}"],
+          "description": "Baris pertama (details) yang berputar. Placeholder: {file} {workspace} {language} {line} {branch}"
+        },
+        "animatedPresence.stateFrames": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["{spinner} Line {line}", "{bar} {percent}%", "{spinner} {elapsed} coding"],
+          "description": "Baris kedua (state) yang berputar. Tambahan placeholder: {spinner} {bar} {percent} {elapsed} {activity}"
+        },
+        "animatedPresence.spinnerFrames": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+          "description": "Karakter untuk {spinner}, maju satu langkah tiap update."
+        },
+        "animatedPresence.showAgent": {
+          "type": "boolean",
+          "default": true,
+          "description": "Deteksi dan tampilkan AI agent yang sedang dipakai (Claude Code, Codex, Copilot, Gemini, Cline, Antigravity, Cursor, dll.)."
+        },
+        "animatedPresence.agentFrames": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["🤖 Coding with {agent}"],
+          "description": "Frame tambahan saat agent terdeteksi. Placeholder: {agent} {editor} dan semua placeholder lain."
+        },
+        "animatedPresence.agentWorkingFrames": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["⚡ {agent} is writing code"],
+          "description": "Frame tambahan saat agent sedang mengedit file."
+        },
+        "animatedPresence.idleText": {
+          "type": "string",
+          "default": "💤 Idle...",
+          "description": "Teks saat tidak ada file terbuka."
+        },
+        "animatedPresence.idleTimeout": {
+          "type": "number",
+          "default": 300,
+          "description": "Detik tanpa aktivitas sebelum presence beralih ke mode idle. 0 = nonaktif."
+        },
+        "animatedPresence.showFileName": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tampilkan nama file. Matikan untuk privasi."
+        },
+        "animatedPresence.showWorkspace": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tampilkan nama workspace. Matikan untuk privasi."
+        },
+        "animatedPresence.largeImageKey": {
+          "type": "string",
+          "default": "logo",
+          "description": "Gambar besar: asset key aplikasi Discord atau URL gambar https."
+        },
+        "animatedPresence.smallImageFrames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "key": { "type": "string" }, "text": { "type": "string" } },
+            "required": ["key"]
+          },
+          "default": [
+            { "key": "{langIcon}", "text": "{language}" },
+            { "key": "{activityIcon}", "text": "{activity}..." }
+          ],
+          "description": "Gambar kecil (pojok gambar besar) yang berganti tiap frame. 'key' = asset key atau URL gambar https (png/jpg/gif). Placeholder: {langIcon} (lang-typescript, ...), {activityIcon} (typing/reading/debugging/idle), {language}, {activity}. Ikon agent ({agentIcon}) otomatis ikut disisipkan saat agent terdeteksi."
+        },
+        "animatedPresence.repoButton": {
+          "type": "string",
+          "enum": ["public", "always", "off"],
+          "enumDescriptions": [
+            "Tampilkan hanya jika repo bisa diakses publik (repo private disembunyikan)",
+            "Selalu tampilkan, termasuk repo private (URL-nya terlihat orang lain)",
+            "Jangan tampilkan"
+          ],
+          "default": "public",
+          "description": "Tombol 'View Repository' otomatis dari remote git (origin) workspace."
+        },
+        "animatedPresence.repoButtonLabel": {
+          "type": "string",
+          "default": "View Repository",
+          "maxLength": 32,
+          "description": "Teks tombol repository."
+        },
+        "animatedPresence.buttons": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": { "label": { "type": "string" }, "url": { "type": "string" } },
+            "required": ["label", "url"]
+          },
+          "default": [],
+          "description": "Maksimal 2 tombol. Contoh: [{\"label\":\"GitHub\",\"url\":\"https://github.com/user\"}]"
+        },
+        "animatedPresence.ignoredWorkspaces": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Nama workspace yang tidak akan ditampilkan."
+        }
+      }
+    }
+  }
+}
