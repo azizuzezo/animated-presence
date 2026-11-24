@@ -1,12 +1,12 @@
 const vscode = require('vscode');
 const path = require('path');
 const { DiscordIPC } = require('./ipc');
-const { DEFAULT_CLIENT_ID, LANGUAGE_ICONS, LANGUAGE_ALIASES } = require('./constants');
+const { DEFAULT_CLIENT_ID, DEFAULT_LOGO, LANGUAGE_ICONS, LANGUAGE_ALIASES } = require('./constants');
 const { AgentDetector } = require('./agents');
 const { repoButtonUrl, getBranch } = require('./repo');
 
 const CFG = 'animatedPresence';
-const MIN_SEND_GAP = 5000; // jeda minimum antar pengiriman ke Discord
+const MIN_SEND_GAP = 4000; // jeda minimum antar update (Discord: maks 5 update per 20 detik)
 
 let client = null;
 let ready = false;
@@ -15,6 +15,7 @@ let timer = null;
 let reconnectTimer = null;
 let pendingSend = null;
 let lastSent = 0;
+let lastPayload = null;
 let frame = 0;
 let sessionStart = Date.now();
 let lastActivity = Date.now();
@@ -30,7 +31,8 @@ function activate(context) {
   status.command = `${CFG}.reconnect`;
   context.subscriptions.push(status);
 
-  const touch = () => { lastActivity = Date.now(); };
+  // Setiap aktivitas (kursor, ketikan, agent) langsung memicu update presence (di-throttle)
+  const touch = () => { lastActivity = Date.now(); requestSend(); };
   lastEditor = vscode.window.activeTextEditor || null;
   agents = new AgentDetector();
   agents.register(context, touch);
@@ -100,7 +102,7 @@ async function connect(clientId) {
   updateStatus('on');
   c.on('close', () => { if (client === c) { cleanup(); scheduleReconnect(); } });
 
-  send();
+  send(false); // frame pertama, tanpa memajukan animasi
   const ms = Math.max(15, cfg().get('frameInterval') || 15) * 1000;
   timer = setInterval(send, ms);
 }
@@ -114,6 +116,7 @@ function scheduleReconnect() {
 function cleanup() {
   ready = false;
   connecting = false;
+  lastPayload = null; // setelah sambung ulang, kirim ulang presence
   if (timer) { clearInterval(timer); timer = null; }
   if (pendingSend) { clearTimeout(pendingSend); pendingSend = null; }
   if (client) { const c = client; client = null; c.destroy(); }
@@ -162,6 +165,26 @@ function progressBar(pct, len = 8) {
 
 function fill(template, vars) {
   return String(template).replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : `{${k}}`));
+}
+
+function frameList(arr, fallback) {
+  return Array.isArray(arr) && arr.length ? arr : fallback;
+}
+
+// Isi placeholder, buang yang kosong/duplikat, lalu ambil frame saat ini (melewati `avoid`)
+function pickImage(list, vars, avoid) {
+  const seen = new Set();
+  const resolved = list
+    .filter((f) => f && f.key)
+    .map((f) => ({ key: fill(f.key, vars), text: fill(f.text || '', vars) }))
+    .filter((f) => f.key && !f.key.includes('{') && !seen.has(f.key) && seen.add(f.key));
+  if (!resolved.length) return null;
+  const start = frame % resolved.length;
+  for (let i = 0; i < resolved.length; i++) {
+    const f = resolved[(start + i) % resolved.length];
+    if (f.key !== avoid) return f;
+  }
+  return null;
 }
 
 function pick(arr, fallback = ['']) {
@@ -239,26 +262,27 @@ function buildActivity() {
     state = fill(pick(c.get('stateFrames'), ['{spinner} Line {line}']), vars);
   }
 
-  // Gambar kecil yang ikut berganti tiap frame (ikon agent ikut disisipkan, tanpa duplikat)
-  let smallFrames = c.get('smallImageFrames');
-  if (!Array.isArray(smallFrames) || !smallFrames.length) smallFrames = [{ key: '{langIcon}', text: '{language}' }];
-  if (agent) smallFrames = [...smallFrames, { key: '{agentIcon}', text: '{agent}' }];
-  const seen = new Set();
-  const resolved = smallFrames
-    .filter((f) => f && f.key)
-    .map((f) => ({ key: fill(f.key, vars), text: fill(f.text || '', vars) }))
-    .filter((f) => f.key && !f.key.includes('{') && !seen.has(f.key) && seen.add(f.key));
-  const small = resolved.length ? resolved[frame % resolved.length] : null;
+  // Gambar besar & kecil berganti tiap frame.
+  // Default: besar = ikon bahasa (+ ikon agent), kecil = logo aplikasi <-> ikon aktivitas. Saat idle: besar = logo, kecil = idle.
+  vars.logo = (c.get('largeImageKey') || '').trim() || DEFAULT_LOGO;
+  const largeList = idle
+    ? [{ key: '{logo}', text: '{editor}' }]
+    : [...frameList(c.get('largeImageFrames'), [{ key: '{langIcon}', text: '{language}' }]),
+      ...(agent ? [{ key: '{agentIcon}', text: '{agent}' }] : [])];
+  const smallList = idle
+    ? [{ key: 'idle', text: 'Idle' }]
+    : frameList(c.get('smallImageFrames'), [{ key: '{logo}', text: '{editor}' }]);
+  const large = pickImage(largeList, vars) || { key: vars.logo, text: vars.editor };
+  // Jangan tampilkan gambar yang sama di besar & kecil sekaligus
+  const small = pickImage(smallList, vars, large.key);
 
   const activity = {
     details: details.slice(0, 128),
     state: state.slice(0, 128),
     timestamps: { start: sessionStart },
     assets: {
-      large_image: c.get('largeImageKey') || 'logo',
-      large_text: idle
-        ? vars.editor
-        : `${vars.editor} \u2022 ${vars.language}${agent ? ` \u2022 ${agent.name}` : ''}`,
+      large_image: large.key,
+      large_text: large.text.slice(0, 128) || undefined,
     },
     instance: false,
   };
@@ -284,24 +308,35 @@ function buildActivity() {
   return activity;
 }
 
-// advance=true: maju ke frame animasi berikutnya (dari timer)
+// advance=true: maju ke frame animasi berikutnya (dari timer).
+// advance=false: update langsung karena ada perubahan (kursor, ketikan, pindah file), frame tetap.
 function send(advance = true) {
   if (!ready || !client) return;
+  if (advance) frame++;
   const wsName = vscode.workspace.name || vscode.workspace.workspaceFolders?.[0]?.name || '';
   if ((cfg().get('ignoredWorkspaces') || []).includes(wsName)) {
-    client.clearActivity();
+    if (lastPayload !== 'cleared') client.clearActivity();
+    lastPayload = 'cleared';
   } else {
-    client.setActivity(buildActivity());
+    const activity = buildActivity();
+    const payload = JSON.stringify(activity);
+    if (!advance && payload === lastPayload) return; // tidak ada yang berubah, hemat jatah update
+    client.setActivity(activity);
+    lastPayload = payload;
   }
   const agent = cfg().get('showAgent') ? agents.current() : null;
   status.tooltip = `Animated Presence: terhubung ke Discord\nAgent: ${
     agent ? `${agent.name}${agent.working ? ' (sedang menulis kode)' : ''} \u2022 via ${agent.source}` : 'tidak terdeteksi'}`;
   lastSent = Date.now();
-  if (advance) frame++;
 }
 
 function deactivate() {
   stop();
 }
 
-module.exports = { activate, deactivate, _test: { buildActivity, setFrame: (n) => { frame = n; } } };
+module.exports = {
+  activate,
+  deactivate,
+  // Hanya untuk pengujian
+  _test: { buildActivity, send, setFrame: (n) => { frame = n; }, attach: (c) => { client = c; ready = true; } },
+};

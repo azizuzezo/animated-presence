@@ -5,7 +5,7 @@
   "galleryBanner": { "color": "#5865F2", "theme": "dark" },
   "keywords": ["discord", "rich presence", "rpc", "presence", "status"],
   "description": "Discord Rich Presence animatif untuk VS Code: teks berputar, ikon berganti, deteksi AI agent, dan tombol repository.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "xyyxzxx",
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/azizuzezo/animated-presence.git" },
@@ -97,8 +97,20 @@
         },
         "animatedPresence.largeImageKey": {
           "type": "string",
-          "default": "logo",
-          "description": "Gambar besar: asset key aplikasi Discord atau URL gambar https."
+          "default": "",
+          "description": "Logo aplikasi ({logo}): asset key aplikasi Discord atau URL gambar https. Kosongkan untuk memakai logo bawaan."
+        },
+        "animatedPresence.largeImageFrames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "key": { "type": "string" }, "text": { "type": "string" } },
+            "required": ["key"]
+          },
+          "default": [
+            { "key": "{langIcon}", "text": "{language}" }
+          ],
+          "description": "Gambar besar yang berganti tiap frame. 'key' = asset key atau URL gambar https. Placeholder: {langIcon} {activityIcon} {logo} {language} {activity} {editor}. Ikon agent ({agentIcon}) otomatis disisipkan saat agent terdeteksi. Saat idle, gambar besar = logo."
         },
         "animatedPresence.smallImageFrames": {
           "type": "array",
@@ -108,10 +120,10 @@
             "required": ["key"]
           },
           "default": [
-            { "key": "{langIcon}", "text": "{language}" },
+            { "key": "{logo}", "text": "{editor}" },
             { "key": "{activityIcon}", "text": "{activity}..." }
           ],
-          "description": "Gambar kecil (pojok gambar besar) yang berganti tiap frame. 'key' = asset key atau URL gambar https (png/jpg/gif). Placeholder: {langIcon} (lang-typescript, ...), {activityIcon} (typing/reading/debugging/idle), {language}, {activity}. Ikon agent ({agentIcon}) otomatis ikut disisipkan saat agent terdeteksi."
+          "description": "Gambar kecil (pojok gambar besar) yang berganti tiap frame. 'key' = asset key atau URL gambar https (png/jpg/gif). Placeholder: {logo} {langIcon} {activityIcon} {language} {activity} {editor}. Gambar yang sama dengan gambar besar otomatis dilewati."
         },
         "animatedPresence.repoButton": {
           "type": "string",

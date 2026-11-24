@@ -21,7 +21,7 @@
 
 - **Tanpa setup.** Install, buka VS Code, dan presence langsung muncul. Tidak perlu login atau konfigurasi apa pun.
 - **Teks animatif.** Baris presence bergantian: file → workspace → bahasa → AI agent, dengan spinner dan progress bar `▰▰▰▱▱▱▱▱`.
-- **Gambar kecil berganti.** Ikon bahasa (27 bahasa), status aktivitas (*typing*, *reading*, *debugging*, *idle*), dan logo AI agent tampil bergantian.
+- **Gambar ikut berganti.** Gambar besar menampilkan ikon bahasa (27 bahasa) dan logo AI agent. Gambar kecil bergantian antara logo dan status aktivitas (*typing*, *reading*, *debugging*, *idle*).
 - **Deteksi AI agent.** Presence tahu saat kamu memakai Claude Code, Codex, Copilot, Gemini, Cline, Antigravity, Cursor, dan agent lain.
 - **Tombol "View Repository".** Otomatis mengarah ke repo GitHub atau GitLab proyekmu, dan hanya muncul untuk repo publik.
 - **Ramah privasi.** Nama file dan workspace bisa disembunyikan, dan workspace tertentu bisa diabaikan.
@@ -34,7 +34,7 @@
     <td align="center" width="50%">
       <img src="media/card-agent.png" alt="Saat AI agent menulis kode"><br>
       <b>AI agent sedang menulis kode</b><br>
-      <sub>Terdeteksi dari <code>claude</code> di terminal, logo Claude di gambar kecil.</sub>
+      <sub>Terdeteksi dari <code>claude</code> di terminal, logo Claude di gambar besar.</sub>
     </td>
     <td align="center" width="50%">
       <img src="media/card-debug.png" alt="Saat debugging"><br>
@@ -97,7 +97,9 @@ Semua pengaturan opsional. Buka **Settings** dan cari `Animated Presence`.
 | `animatedPresence.frameInterval` | `15` | Detik antar frame (minimum 15, batas Discord) |
 | `animatedPresence.detailsFrames` | `["Editing {file}", …]` | Frame baris pertama |
 | `animatedPresence.stateFrames` | `["{spinner} Line {line}", …]` | Frame baris kedua |
-| `animatedPresence.smallImageFrames` | ikon bahasa + aktivitas | Frame gambar kecil |
+| `animatedPresence.largeImageFrames` | ikon bahasa | Frame gambar besar (ikon agent otomatis ikut) |
+| `animatedPresence.smallImageFrames` | logo + aktivitas | Frame gambar kecil |
+| `animatedPresence.largeImageKey` | logo bawaan | Logo aplikasi (`{logo}`): asset key atau URL gambar |
 | `animatedPresence.spinnerFrames` | spinner Braille | Karakter spinner |
 | `animatedPresence.showAgent` | `true` | Deteksi AI agent |
 | `animatedPresence.agentFrames` | `["🤖 Coding with {agent}"]` | Frame saat agent terdeteksi |
@@ -111,7 +113,7 @@ Semua pengaturan opsional. Buka **Settings** dan cari `Animated Presence`.
 | `animatedPresence.idleTimeout` | `300` | Detik tanpa aktivitas sebelum idle (`0` = mati) |
 | `animatedPresence.idleText` | `"💤 Idle..."` | Teks saat idle |
 
-**Placeholder:** `{file}` `{workspace}` `{language}` `{line}` `{branch}` `{spinner}` `{bar}` `{percent}` `{elapsed}` `{activity}` `{agent}` `{editor}`
+**Placeholder:** `{file}` `{workspace}` `{language}` `{line}` `{branch}` `{spinner}` `{bar}` `{percent}` `{elapsed}` `{activity}` `{agent}` `{editor}` `{logo}`
 
 <details>
 <summary><b>Contoh kustomisasi</b></summary>

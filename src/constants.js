@@ -4,6 +4,10 @@
 // Nama aplikasi = teks setelah "Playing ..." di profil Discord (mis. "Visual Studio Code").
 const DEFAULT_CLIENT_ID = '1574825884290916463';
 
+// Logo aplikasi sebagai URL (bukan asset key): Discord tidak menyimpan cache lama untuk URL,
+// dan logo bisa diganti cukup dengan push ke GitHub.
+const DEFAULT_LOGO = 'https://raw.githubusercontent.com/azizuzezo/animated-presence/main/assets/discord/logo.png';
+
 // languageId VS Code yang punya ikon "lang-<nama>" di Art Assets aplikasi Discord.
 // Bahasa lain memakai ikon "lang-file".
 const LANGUAGE_ICONS = new Set([
@@ -22,4 +26,4 @@ const LANGUAGE_ALIASES = {
   powershell: 'shellscript',
 };
 
-module.exports = { DEFAULT_CLIENT_ID, LANGUAGE_ICONS, LANGUAGE_ALIASES };
+module.exports = { DEFAULT_CLIENT_ID, DEFAULT_LOGO, LANGUAGE_ICONS, LANGUAGE_ALIASES };

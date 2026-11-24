@@ -50,7 +50,7 @@ function line(text, x, y, attrs) {
 }
 
 // Kartu aktivitas bergaya profil Discord (tema gelap)
-function card({ details, state, small, elapsed, button = 'View Repository', heading = 'Playing' }) {
+function card({ details, state, large = 'logo', small, elapsed, button = 'View Repository', heading = 'Playing' }) {
   const H = button ? 222 : 172;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
@@ -60,7 +60,7 @@ function card({ details, state, small, elapsed, button = 'View Repository', head
   <rect width="${W}" height="${H}" fill="#1E1F22"/>
   <rect x="12" y="12" width="${W - 24}" height="${H - 24}" rx="14" fill="#2B2D31"/>
   <text x="32" y="44" font-family="${FONT}" font-size="13" font-weight="700" fill="#B5BAC1">${heading}</text>
-  <image x="32" y="62" width="96" height="96" href="${img('logo')}" clip-path="url(#large)"/>
+  <image x="32" y="62" width="96" height="96" href="${img(large)}" clip-path="url(#large)"/>
   <circle cx="120" cy="150" r="21" fill="#2B2D31"/>
   <image x="103" y="133" width="34" height="34" href="${img(small)}" clip-path="url(#small)"/>
   <g font-family="${FONT}">
@@ -76,13 +76,13 @@ function card({ details, state, small, elapsed, button = 'View Repository', head
 
 // Urutan frame mengikuti keluaran ekstensi (default settings), tiap frame = 15 detik di Discord
 const FRAMES = [
-  { details: 'Editing app.ts', state: '⠋ Line 50', small: 'lang-typescript', elapsed: '12:04' },
-  { details: 'Workspace: my-project', state: '▰▰▰▰▱▱▱▱ 50%', small: 'typing', elapsed: '12:19' },
-  { details: 'Coding in typescript', state: '⠹ 12m coding', small: 'lang-typescript', elapsed: '12:34' },
-  { details: '🤖 Coding with Claude Code', state: '⠸ Line 64', small: 'agent-claude', elapsed: '12:49' },
-  { details: '⚡ Claude Code is writing code', state: '▰▰▰▰▰▱▱▱ 64%', small: 'agent-claude', elapsed: '13:04' },
-  { details: 'Editing server.py', state: '⠼ Line 128', small: 'lang-python', elapsed: '13:19' },
-  { details: 'Workspace: my-project', state: '▰▰▰▰▰▰▱▱ 71%', small: 'debugging', elapsed: '13:34' },
+  { details: 'Editing app.ts', state: '⠋ Line 50', large: 'lang-typescript', small: 'logo', elapsed: '12:04' },
+  { details: 'Workspace: my-project', state: '▰▰▰▰▱▱▱▱ 50%', large: 'lang-typescript', small: 'typing', elapsed: '12:19' },
+  { details: 'Coding in typescript', state: '⠹ 12m coding', large: 'lang-typescript', small: 'logo', elapsed: '12:34' },
+  { details: '🤖 Coding with Claude Code', state: '⠸ Line 64', large: 'agent-claude', small: 'logo', elapsed: '12:49' },
+  { details: '⚡ Claude Code is writing code', state: '▰▰▰▰▰▱▱▱ 64%', large: 'agent-claude', small: 'logo', elapsed: '13:04' },
+  { details: 'Editing server.py', state: '⠼ Line 128', large: 'lang-python', small: 'logo', elapsed: '13:19' },
+  { details: 'Workspace: my-project', state: '▰▰▰▰▰▰▱▱ 71%', large: 'lang-python', small: 'debugging', elapsed: '13:34' },
 ];
 
 function render(svgText, out) {
@@ -112,7 +112,7 @@ execFileSync('ffmpeg', [
 // Kartu statis
 render(card(FRAMES[4]), path.join(MEDIA, 'card-agent.png'));
 render(card(IDLE), path.join(MEDIA, 'card-idle.png'));
-render(card({ details: 'Editing main.rs', state: '⠦ Line 12', small: 'debugging', elapsed: '03:41', button: null }),
+render(card({ details: 'Editing main.rs', state: '⠦ Line 12', large: 'lang-rust', small: 'debugging', elapsed: '03:41', button: null }),
   path.join(MEDIA, 'card-debug.png'));
 
 // Lembar ikon
