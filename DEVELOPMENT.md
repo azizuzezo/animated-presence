@@ -13,7 +13,7 @@ Panduan untuk pengembang dan publisher ekstensi. Pengguna biasa tidak perlu memb
 | [src/constants.js](src/constants.js) | Application ID Discord dan daftar ikon bahasa |
 | [scripts/build-icons.js](scripts/build-icons.js) | Generator ikon ke `assets/discord/` |
 | [scripts/build-preview.js](scripts/build-preview.js) | Generator gambar README ke `media/` |
-| `assets/brand/logo.png` | Logo untuk Discord (`logo` dan App Icon). **Jangan** dipakai untuk ikon Marketplace atau README, karena memuat logo VS Code/Discord dan ditolak Marketplace sebagai "suspicious content". Ikon Marketplace memakai desain netral dari `build-icons.js`. |
+| `assets/brand/logo.png` | Sumber logo: ikon ekstensi, App Icon Discord, dan gambar `logo` presence |
 
 Ekstensi ini tidak punya dependensi npm. Tekan **F5** untuk menjalankan Extension Development Host.
 

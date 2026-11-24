@@ -21,8 +21,6 @@ const W = 600;
 const SCALE = 2;
 
 const img = (name) => `data:image/png;base64,${fs.readFileSync(path.join(ICONS, `${name}.png`)).toString('base64')}`;
-// Gambar README memakai logo netral (tanpa logo brand lain), lihat build-icons.js
-const LOGO = `data:image/png;base64,${fs.readFileSync(path.join(ROOT, 'assets', 'logo-neutral.png')).toString('base64')}`;
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // Emoji dirender sebagai gambar Twemoji (seperti di Discord), karena rsvg tidak bisa font emoji berwarna.
@@ -62,7 +60,7 @@ function card({ details, state, small, elapsed, button = 'View Repository', head
   <rect width="${W}" height="${H}" fill="#1E1F22"/>
   <rect x="12" y="12" width="${W - 24}" height="${H - 24}" rx="14" fill="#2B2D31"/>
   <text x="32" y="44" font-family="${FONT}" font-size="13" font-weight="700" fill="#B5BAC1">${heading}</text>
-  <image x="32" y="62" width="96" height="96" href="${LOGO}" clip-path="url(#large)"/>
+  <image x="32" y="62" width="96" height="96" href="${img('logo')}" clip-path="url(#large)"/>
   <circle cx="120" cy="150" r="21" fill="#2B2D31"/>
   <image x="103" y="133" width="34" height="34" href="${img(small)}" clip-path="url(#small)"/>
   <g font-family="${FONT}">
